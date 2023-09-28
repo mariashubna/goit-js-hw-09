@@ -48,12 +48,12 @@ function updateTimer(endTime) {
   value[3].textContent = addZero(seconds);
 }
 
-let selectedDate;
+let OurSelectedDate;
 let intervalId;
 function ourTime() {
-  selectedDate = flatpickr.parseDate(input.value);
-  if (selectedDate) {
-    const endTime = selectedDate.getTime();
+  OurSelectedDate = flatpickr.parseDate(input.value);
+  if (OurSelectedDate) {
+    const endTime = OurSelectedDate.getTime();
     updateTimer(endTime);
     startButton.disabled = true;
     intervalId = setInterval(() => {
