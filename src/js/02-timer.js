@@ -24,47 +24,46 @@ const options = {
       window.alert('Please choose a date in the future');
     } else {
       startButton.disabled = false;
+
+      startButton.addEventListener('click', ourTime);
+
+      function updateTimer() {
+        currentDate = Date.now();
+        const timeRemaining = selectedDate - currentDate;
+
+        if (timeRemaining <= 0) {
+          
+          clearTimeout(intervalId)
+          startButton.disabled = true;
+          return;
+        }
+
+        const { days, hours, minutes, seconds } = convertMs(timeRemaining);
+
+        value[0].textContent = addZero(days);
+        value[1].textContent = addZero(hours);
+        value[2].textContent = addZero(minutes);
+        value[3].textContent = addZero(seconds);
+      }
+
+      
+      let intervalId;
+      function ourTime() {
+        
+        if (selectedDate) {
+          
+        
+          startButton.disabled = true;
+          intervalId = setInterval(() => {
+            updateTimer();
+          }, 1000);
+        }
+      }
     }
   },
 };
 
-startButton.addEventListener('click', ourTime);
-
-function updateTimer(endTime) {
-  currentDate = Date.now();
-  const timeRemaining = endTime - currentDate;
-
-  if (timeRemaining <= 0) {
-    value.forEach(field => (field.textContent = '00'));
-    startButton.disabled = true;
-    return;
-  }
-
-  const { days, hours, minutes, seconds } = convertMs(timeRemaining);
-
-  value[0].textContent = addZero(days);
-  value[1].textContent = addZero(hours);
-  value[2].textContent = addZero(minutes);
-  value[3].textContent = addZero(seconds);
-}
-
-let OurSelectedDate;
-let intervalId;
-function ourTime() {
-  OurSelectedDate = flatpickr.parseDate(input.value);
-  if (OurSelectedDate) {
-    const endTime = OurSelectedDate.getTime();
-    updateTimer(endTime);
-    startButton.disabled = true;
-    intervalId = setInterval(() => {
-      updateTimer(endTime);
-    }, 1000);
-  }
-}
-
-
 function convertMs(ms) {
-  
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
@@ -74,14 +73,12 @@ function convertMs(ms) {
   const hours = Math.floor((ms % day) / hour);
   const minutes = Math.floor(((ms % day) % hour) / minute);
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
-  
+
   return { days, hours, minutes, seconds };
 }
 
-console.log(convertMs(2000)); 
-console.log(convertMs(140000)); 
-console.log(convertMs(24140000)); 
+
 
 flatpickr(input, options);
 
-console.log(options);
+
